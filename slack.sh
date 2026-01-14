@@ -11,7 +11,7 @@ slack_send(){
 
 ## Construct Test_Configuration
 printf -v test_config "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
-		"test-type = $test_type" "client = $client" "branch = $SOLANA_BUILD_BRANCH" "commit = $git_commit" \
+		"test-type = $test_type" "client = $client" "branch = $TREZOA_BUILD_BRANCH" "commit = $git_commit" \
 		"cluster version = $cluster_version" "bench-tps-clients = $num_clients" "read-client-keys = $client_keypair_path" \
 		"duration = $duration" "tx_count = $tx_count" "thread_batch_sleep_ms = $thread_batch_sleep_ms" "durable_nonce = $USE_DURABLE_NONCE"
 		

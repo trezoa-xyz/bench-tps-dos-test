@@ -7,7 +7,7 @@ source $HOME/.profile
 source $HOME/env-artifact.sh
 
 [[ ! "$ENDPOINT" ]]&& echo "No ENDPOINT" && exit 1
-[[ ! "$SOLANA_METRICS_CONFIG" ]] && echo no SOLANA_METRICS_CONFIG ENV && exit 1
+[[ ! "$TREZOA_METRICS_CONFIG" ]] && echo no TREZOA_METRICS_CONFIG ENV && exit 1
 [[ ! "$KEYPAIR_FILE" ]]&& KEYPAIR_FILE=large-keypairs.yaml && echo No KEYPAIR_FILE Env , use $KEYPAIR_FILE
 #### bench-tps ENV ####
 echo --- stage:setup bench-tps parameters ---
@@ -35,10 +35,10 @@ args=(
 # benchmark execution
 cd $HOME
 echo --- start of benchmark $(date)
-benchmark=$(./solana-bench-tps "${args[@]}" &)
+benchmark=$(./trezoa-bench-tps "${args[@]}" &)
 sleep 2
 cd $HOME
-ret_ps=$(ps aux | grep solana-bench-tps)
+ret_ps=$(ps aux | grep trezoa-bench-tps)
 echo $ret_ps > ps.out
 echo --- end of benchmark $(date)
 

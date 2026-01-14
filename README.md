@@ -9,8 +9,8 @@ This is a implementation for
 ```
   TEST_TYPE: "QUIC"         # This will show on report
   GIT_TOKEN: "xxxxx"     
-  BUILD_SOLANA: "true"
-  SOLANA_BUILD_BRANCH: "master"  # same-as-cluster / master /v1.10 / v1.10.32 ...
+  BUILD_TREZOA: "true"
+  TREZOA_BUILD_BRANCH: "master"  # same-as-cluster / master /v1.10 / v1.10.32 ...
   # api.inernal
   NDPOINT: "http://123.123.123.123"
   NUM_CLIENT: 2
@@ -25,8 +25,8 @@ This is a implementation for
   KEEP_INSTANCES: "true"  # do not delete instances after bench-tps test
 ```
 + Mandatory: ENDPOINT / NUM_CLIENT / SLACK_WEBHOOK / TEST_TYPE
-+ BUILD_SOLANA: "true" to build bench-tps from solana source
-+ SOLANA_BUILD_BRANCH: git checkout branch/version to build solana (same-as-cluster/master/v1.10.32/10.1 ...etc.) default: same-as-cluster
++ BUILD_TREZOA: "true" to build bench-tps from trezoa source
++ TREZOA_BUILD_BRANCH: git checkout branch/version to build trezoa (same-as-cluster/master/v1.10.32/10.1 ...etc.) default: same-as-cluster
 + AVAILABLE_ZONE: zones to create google cloud instance. (Be aware of quota issue)
 + NUM_CLIENT: 10 (default 10 for QUIC & 1 for UDP)
 + USE_TPU_CLIENT/DURATION/TX_COUNT/SUSTAINED/THREAD_BATCH_SLEEP_MS arguments for bench-tps
@@ -34,9 +34,9 @@ This is a implementation for
 
 ## Flow
 + creates NUM_CLIENT google clound instances 
-+ builds solana to use the latest bench-tps (option)
-    + use BUILD_SOLANA=true to enable
-    + downloads and builds https://github.com/anza-xyz/agave
++ builds trezoa to use the latest bench-tps (option)
+    + use BUILD_TREZOA=true to enable
+    + downloads and builds https://github.com/trezoa-xyz/trezoa
     + waits for NUM_CLIENT finishing build (blocking)
 + starts UDP/QUIC bench-tps DOS test by runing scripts in the instances
 + analyzes data by querying influxcloud
@@ -45,12 +45,12 @@ This is a implementation for
 ## Files
 + dos-run.sh 
     Main process. To prepare environment variables, create google cloud instances, run benchmark and generate a report then send to slack
-+ start-build-solana.sh
-    The script downloads and builds solana 
++ start-build-trezoa.sh
+    The script downloads and builds trezoa 
 + start-dos-test.sh
     The script runs bench-tps DOS test in dynamically created gc instances
 + exec-start-template.sh 
-    This file is used to generate exec-start-build-solana.sh to execute start-build-solana.sh 
+    This file is used to generate exec-start-build-trezoa.sh to execute start-build-trezoa.sh 
     This file is used to generate exec-start-dos-test.sh to execute start-dos-test.sh 
 + dos-report-env.sh 
     The script is stored in bench-tps-dos bucket. It is downloaded by start-dos-test.sh. It has confidential environment for executing start-dos-test.sh

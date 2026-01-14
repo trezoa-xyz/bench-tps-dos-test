@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -ex
-## arg 1: wheather to build solana-bench-tps
+## arg 1: wheather to build trezoa-bench-tps
 ## arg 2: ARTIFACT BUCKET
 ## arg 3: NAME OF ENV ARTIFACT FILE
 ## env
@@ -60,37 +60,37 @@ git clone "$BUILDKITE_REPO"
 cd "$GIT_REPO_DIR"
 git checkout "$BUILDKITE_BRANCH"
 git branch
-echo ------- stage: download solana repos and build solana-bench-tps ------
+echo ------- stage: download trezoa repos and build trezoa-bench-tps ------
 cd "$HOME"
 
 if  [[ "$build_binary" == "true" ]];then 
-    echo ------- build solana-bench-tps ------
-    rm -rf "$HOME/solana"
-    git clone "$SOLANA_REPO" solana
+    echo ------- build trezoa-bench-tps ------
+    rm -rf "$HOME/trezoa"
+    git clone "$TREZOA_REPO" trezoa
 
-    [[ -d "$HOME/solana" ]] || exit 1
-    cd "$HOME/solana"
-    if [[ "$SOLANA_GIT_COMMIT" ]];then
-        git checkout "$SOLANA_GIT_COMMIT"
-    elif [[ "$SOLANA_BUILD_BRANCH" ]];then
-        git checkout "$SOLANA_BUILD_BRANCH"
+    [[ -d "$HOME/trezoa" ]] || exit 1
+    cd "$HOME/trezoa"
+    if [[ "$TREZOA_GIT_COMMIT" ]];then
+        git checkout "$TREZOA_GIT_COMMIT"
+    elif [[ "$TREZOA_BUILD_BRANCH" ]];then
+        git checkout "$TREZOA_BUILD_BRANCH"
     fi
-    cd "$HOME/solana/bench-tps"
-    [[ -f "$HOME/solana/target/release/solana-bench-tps" ]]&& rm "$HOME/solana/target/release/solana-bench-tps"
+    cd "$HOME/trezoa/bench-tps"
+    [[ -f "$HOME/trezoa/target/release/trezoa-bench-tps" ]]&& rm "$HOME/trezoa/target/release/trezoa-bench-tps"
     res=$(cargo build --release > bench-tps-build.output)
     echo "$res"
-    if [[ -f "$HOME/solana/target/release/solana-bench-tps" ]];then
-        cp "$HOME/solana/target/release/solana-bench-tps"  "$HOME"
-        upload_file "$HOME/solana-bench-tps" "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" 
+    if [[ -f "$HOME/trezoa/target/release/trezoa-bench-tps" ]];then
+        cp "$HOME/trezoa/target/release/trezoa-bench-tps"  "$HOME"
+        upload_file "$HOME/trezoa-bench-tps" "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" 
     else
-        echo "build solana-bench-tps fail"
+        echo "build trezoa-bench-tps fail"
         exit 1
     fi   
 else
     echo ------- download from bucket ------
     download_file "gs://$ARTIFACT_BUCKET/$BUILDKITE_PIPELINE_ID/$BUILDKITE_BUILD_ID/$BUILDKITE_JOB_ID" "$BENCH_TPS_ARTIFACT_FILE" "$HOME"
-    [[ ! -f "$HOME/solana-bench-tps" ]] && echo no solana-bench-tps && exit 1
-    chmod +x "$HOME/solana-bench-tps"
+    [[ ! -f "$HOME/trezoa-bench-tps" ]] && echo no trezoa-bench-tps && exit 1
+    chmod +x "$HOME/trezoa-bench-tps"
 fi 
 
 echo ---- stage: copy files to HOME and mkdir log folder ----

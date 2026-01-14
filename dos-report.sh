@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## solana-bench-tps config
+## trezoa-bench-tps config
 set -ex
 # read env
 source "env-artifact.sh"
@@ -38,7 +38,7 @@ fi
 test_type=$TEST_TYPE
 client="tpu"
 [[ "$USE_TPU_CLIENT" == "false" ]] && client="rpc" 
-git_commit=$SOLANA_GIT_COMMIT
+git_commit=$TREZOA_GIT_COMMIT
 cluster_version=$CLUSTER_VERSION
 num_clients=$NUM_CLIENT
 client_keypair_path="keypair-configs/$KEYPAIR_FILE"
@@ -366,7 +366,7 @@ FIELD_MEASUREMENT[mean_tps]=tps
 for r in "${!DATAPOINT[@]}"
 do
 	measurement=${FIELD_MEASUREMENT[$r]}
-	write_data="$measurement,build=$build,client=$client,branch=$SOLANA_BUILD_BRANCH,git_commit=$git_commit,cluster_version=$cluster_version,\
+	write_data="$measurement,build=$build,client=$client,branch=$TREZOA_BUILD_BRANCH,git_commit=$git_commit,cluster_version=$cluster_version,\
 clients_num=$num_clients,duration=$duration,tx_count=$tx_count,thread_batch_sleep_ms=$thread_batch_sleep_ms,durable_nonce=$USE_DURABLE_NONCE $r=${DATAPOINT[$r]} $write_ts"
     write_datapoint_v2 "$write_data" "$API_V2_HOST"
 done
@@ -374,7 +374,7 @@ done
 ## create Grafana link
 gf_from=$(echo "scale=2;${start_time}*1000" | bc)
 gf_to=$(echo "scale=2;${stop_time}*1000" | bc)
-gf_prefix="https://metrics.solana.com:3000/d/monitor-edge/cluster-telemetry?orgId=1&from="
+gf_prefix="https://metrics.trezoa.com:3000/d/monitor-edge/cluster-telemetry?orgId=1&from="
 gf_postfix="&var-datasource=Influx-Enterprise&var-testnet=tds&var-hostid=All"
 printf -v gf_url "%s%s%s%s%s" $gf_prefix $gf_from "&to=" $gf_to $gf_postfix
 

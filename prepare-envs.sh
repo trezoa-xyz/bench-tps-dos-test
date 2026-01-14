@@ -21,17 +21,17 @@ echo ----- stage: checkout buildkite Steps Env ------
 [[ ! "$NUM_CLIENT" ]]&& echo NUM_CLIENT env not found && exit 1
 [[ ! "$TERMINATION_CHECK_INTERVAL" ]]&& TERMINATION_CHECK_INTERVAL=10 && echo TERMINATION_CHECK_INTERVAL env not found, use $TERMINATION_CHECK_INTERVAL
 [[ ! "$GIT_REPO_DIR" ]]&& GIT_REPO_DIR="bench-tps-dos-test"
-[[ ! "$SOLANA_BUILD_BRANCH" ]]&& SOLANA_BUILD_BRANCH=master
-if [[ ! "$SOLANA_GIT_COMMIT" ]];then
-    ret=$(git clone https://github.com/anza-xyz/agave.git solana)
-    if [[ -d solana ]];then
-        cd ./solana
-        [[ ! "$SOLANA_BUILD_BRANCH" ]]&& SOLANA_BUILD_BRANCH=master
-        ret=$(git checkout $SOLANA_BUILD_BRANCH)
-        SOLANA_GIT_COMMIT=$(git rev-parse HEAD)
+[[ ! "$TREZOA_BUILD_BRANCH" ]]&& TREZOA_BUILD_BRANCH=master
+if [[ ! "$TREZOA_GIT_COMMIT" ]];then
+    ret=$(git clone https://github.com/trezoa-xyz/trezoa.git trezoa)
+    if [[ -d trezoa ]];then
+        cd ./trezoa
+        [[ ! "$TREZOA_BUILD_BRANCH" ]]&& TREZOA_BUILD_BRANCH=master
+        ret=$(git checkout $TREZOA_BUILD_BRANCH)
+        TREZOA_GIT_COMMIT=$(git rev-parse HEAD)
         cd ../
     else
-        echo "can not clone https://github.com/anza-xyz/agave.git"
+        echo "can not clone https://github.com/trezoa-xyz/trezoa.git"
         exit 1
     fi
 fi
@@ -40,10 +40,10 @@ fi
 [[ ! "$KEYPAIR_FILE" ]]&&KEYPAIR_FILE="large-keypairs.yaml"
 [[ ! "$KEYPAIR_TAR_FILE" ]] && KEYPAIR_TAR_FILE=keypair-configs.tgz 
 [[ ! "$ID_FILE" ]]&&ID_FILE="testnet-dos-funder.json"
-[[ ! "$BENCH_TPS_ARTIFACT_FILE" ]]&& BENCH_TPS_ARTIFACT_FILE="solana-bench-tps"
+[[ ! "$BENCH_TPS_ARTIFACT_FILE" ]]&& BENCH_TPS_ARTIFACT_FILE="trezoa-bench-tps"
 [[ ! "$DOS_BENCH_TPS_PRIVATE_BUCKET" ]]&& DOS_BENCH_TPS_PRIVATE_BUCKET=bench-tps-dos-private
 [[ ! "$DOS_BENCH_TPS_LOG_BUCKET" ]]&& DOS_BENCH_TPS_LOG_BUCKET="bench-tps-dos-log"
-[[ ! "$SOLANA_REPO" ]]&& SOLANA_REPO=https://github.com/anza-xyz/agave.git
+[[ ! "$TREZOA_REPO" ]]&& TREZOA_REPO=https://github.com/trezoa-xyz/trezoa.git
 [[ ! "$KEEP_INSTANCES" ]]&& KEEP_INSTANCES="false" && echo KEEP_INSTANCES env not found, use $KEEP_INSTANCES
 [[ ! "$RUN_BENCH_AT_TS_UTC" ]]&& RUN_BENCH_AT_TS_UTC=0 && echo RUN_BENCH_AT_TS_UTC env not found, use $RUN_BENCH_AT_TS_UTC
 #[[ ! "$SLACK_WEBHOOK" ]]&&[[ ! "$DISCORD_WEBHOOK" ]]&& echo no WEBHOOK found&&exit 1
@@ -81,9 +81,9 @@ echo "TPU_DISABLE_QUIC=$TPU_DISABLE_QUIC" >> env-artifact.sh
 echo "NUM_CLIENT=$NUM_CLIENT" >> env-artifact.sh
 echo "GIT_TOKEN=$GIT_TOKEN" >> env-artifact.sh
 echo "GIT_REPO_DIR=$GIT_REPO_DIR" >> env-artifact.sh
-echo "SOLANA_REPO=$SOLANA_REPO" >> env-artifact.sh
-echo "SOLANA_BUILD_BRANCH=$SOLANA_BUILD_BRANCH" >> env-artifact.sh
-echo "SOLANA_GIT_COMMIT=$SOLANA_GIT_COMMIT" >> env-artifact.sh
+echo "TREZOA_REPO=$TREZOA_REPO" >> env-artifact.sh
+echo "TREZOA_BUILD_BRANCH=$TREZOA_BUILD_BRANCH" >> env-artifact.sh
+echo "TREZOA_GIT_COMMIT=$TREZOA_GIT_COMMIT" >> env-artifact.sh
 echo "KEEP_INSTANCES=$KEEP_INSTANCES" >> env-artifact.sh
 echo "RUN_BENCH_AT_TS_UTC=$RUN_BENCH_AT_TS_UTC" >> env-artifact.sh
 echo "SLACK_WEBHOOK=$SLACK_WEBHOOK" >> env-artifact.sh
@@ -105,7 +105,7 @@ echo "DOS_BENCH_TPS_PRIVATE_BUCKET=$DOS_BENCH_TPS_PRIVATE_BUCKET" >> env-artifac
 echo "DOS_BENCH_TPS_LOG_BUCKET=$DOS_BENCH_TPS_LOG_BUCKET" >> env-artifact.sh
 echo "ARTIFACT_BUCKET=$ARTIFACT_BUCKET" >> env-artifact.sh
 echo "ENV_ARTIFACT_FILE=$ENV_ARTIFACT_FILE" >> env-artifact.sh
-echo "BENCH_TPS_ARTIFACT_FILE=solana-bench-tps" >> env-artifact.sh
+echo "BENCH_TPS_ARTIFACT_FILE=trezoa-bench-tps" >> env-artifact.sh
 ## large data set
 echo "LARGE_DATA_SET=$LARGE_DATA_SET" >> env-artifact.sh
 echo "INFLUX_WINDOW_INTERVAL=$INFLUX_WINDOW_INTERVAL" >> env-artifact.sh
