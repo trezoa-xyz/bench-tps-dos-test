@@ -20,7 +20,7 @@ for sship in "${instance_ip[@]}"
 do
     [[ $client_num -eq 1 ]] && arg1="true" || arg1="false"
     # run start-build-dependency.sh which in agent machine
-    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@"$sship" 'bash -s' < start-build-dependency.sh "$arg1" "$artifact_bucket" "$artifact_file")
+    ret_build_dependency=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" trz@"$sship" 'bash -s' < start-build-dependency.sh "$arg1" "$artifact_bucket" "$artifact_file")
     (( client_num++ )) || true
 done
 
@@ -29,7 +29,7 @@ client_num=1
 for sship in "${instance_ip[@]}"
 do
     # run start-dos-test.sh which in client machine
-    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship "nohup /home/sol/start-dos-test.sh  1> start-dos-test.nohup 2> start-dos-test.nohup &")
+    ret_run_dos=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" trz@$sship "nohup /home/trezoa/start-dos-test.sh  1> start-dos-test.nohup 2> start-dos-test.nohup &")
     (( client_num++ )) || true 
 done
 # # Get Time Start
@@ -42,13 +42,13 @@ echo ----- stage: check finish of process ---
 sleep 5
 for sship in "${instance_ip[@]}"
 do
-    ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt) || true
+    ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" trz@$sship 'pgrep --full "bash /home/trezoa/start-dos-test.sh*"' > pid.txt) || true
     pid=$(cat pid.txt)
     [[ $pid == "" ]] && echo "$sship has finished run bench-tps" || echo "pid=$pid"
     while [ "$pid" != "" ]
     do
         sleep $TERMINATION_CHECK_INTERVAL
-        ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship 'pgrep --full "bash /home/sol/start-dos-test.sh*"' > pid.txt) || true
+        ret_pid=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" trz@$sship 'pgrep --full "bash /home/trezoa/start-dos-test.sh*"' > pid.txt) || true
         pid=$(cat pid.txt)
         [[ $pid == "" ]] && echo "$sship has finished run bench-tps" || echo "pid=$pid"
     done
@@ -80,7 +80,7 @@ echo ----- stage: upload logs ------
 cnt=1
 for sship in "${instance_ip[@]}"
 do
-    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" sol@$sship /home/sol/start-upload-logs.sh $cnt)
+    ret_pre_build=$(ssh -i id_ed25519_dos_test -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" trz@$sship /home/trezoa/start-upload-logs.sh $cnt)
     (( cnt++ )) || true
 done
 sleep 5
