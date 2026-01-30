@@ -10,7 +10,7 @@ create_interval=60
 
 function create_gce() {
 	local vm_name=bench-tps-client-$(date +%y%m%d-%H-%M-%S)
-	local project=principal-lane-200702
+	local trezoa=principal-lane-200702
 	local img_name=$GC_IMAGE
 	local machine_type=n1-standard-32
 	local network_tag=allow-everything,allow-everything-egress
@@ -18,7 +18,7 @@ function create_gce() {
 		zone=asia-east1-b
 	fi
 	ret_create=$(gcloud beta compute instances create "$vm_name" \
-		--project=$project \
+		--trezoa=$trezoa \
 		--source-machine-image="$img_name" \
 		--zone="$1" \
 		--machine-type="$machine_type" \
